@@ -1,7 +1,8 @@
 # suggested to be added
 
 convolve.fft <- function(x,y, padding='', is.filter= TRUE) {
-    #' convolution using FFT
+    #' convolution using FFT with nonzero padding
+    #' @details
     #' When convolution filter is used for smoothing data, data and the
     #' kernel are zero padded traditionally. However, this causes a cut-off
     #' at the edges, which is often an undesired effect.
@@ -76,8 +77,10 @@ convolve.fft <- function(x,y, padding='', is.filter= TRUE) {
 }
 
 
-Gauss.Kernel <- function(sigma, R= NULL, deriv=0) {
+gauss.kernel <- function(sigma, R= NULL, deriv=0) {
     #' generate a 1D Gaussian kernel
+    #' @details
+    #' Calculate the kernel from the Gaussian
     #' using the equation 1/sqrt(2*pi)/sigma*exp(-(x)**2/(2*sigma**2))
     #' Alternatively, use the derivative function that is -x/sigma**2 times
     #' the Gaussian above.
@@ -102,21 +105,23 @@ Gauss.Kernel <- function(sigma, R= NULL, deriv=0) {
 }
 
 
-smooth.Gauss <- function(y, sigma= 10, R= NULL, deriv=0) {
+smooth.gauss <- function(y, sigma= 10, R= NULL, deriv=0) {
     #' A function to smooth the data array y using a Gaussian kernel
+    #' @details
     #' It uses an offsetted padding and the convolve.fft function
     #' to calculate the result.
     #' The mean is subtracted from y for removing an offset.
     #' If y is only smoothed, this mean is readded at the end. For the
     #' derivative it is left out.
     #'
-    #' If R is not more than 3*sigma, the kernel is renormalized to avoid
+    #' If R (window radius) is not more than 3*sigma, the kernel is renormalized to avoid
     #' offsetting the data.
+    #' The full window is 2R+1 wide.
     #'
     #' @param y     the data
     #' @param sigma width of the Gaussian, standard deviation
     #' @param R     the half window size for the kernel; if NULL,
-    #'              use automatic, 3*sigma see Gauss.Kernel
+    #'              use automatic, 3*sigma see gauss.kernel
     #' @param deriv derivative, possible values 0 or 1
     #'
     #' @return array of smoothed data
@@ -126,7 +131,7 @@ smooth.Gauss <- function(y, sigma= 10, R= NULL, deriv=0) {
     if(is.null(R)) {
         R = 3*sigma
     }
-    gk <- Gauss.Kernel(sigma, R, deriv)
+    gk <- gauss.kernel(sigma, R, deriv)
     # the real derivative is negative at the start,
     # not what we need in the detection.
     # leaving out the rev() in the fft convolution would
@@ -158,9 +163,10 @@ smooth.Gauss <- function(y, sigma= 10, R= NULL, deriv=0) {
 }
 
 
-differentiate.Gauss <- function(y, sigma= 10, R= NULL) {
+diff.gauss <- function(y, sigma= 10, R= NULL) {
     #' differentiate data using a Gaussian kernel
-    #' it is an envelope calling the smooth.Gauss with deriv=1
+    #' @details
+    #' It is an envelope function calling the smooth.Gauss with deriv=1
     #'
     #' @param y     the data vector
     #' @param sigma width of the Gaussian (equivalent to
@@ -172,21 +178,28 @@ differentiate.Gauss <- function(y, sigma= 10, R= NULL) {
     #'
     #' @export
 
-    smooth.Gauss(y, sigma, R, deriv=1)
+    smooth.gauss(y, sigma, R, deriv=1)
 }
 
 
 find.peaks <- function(a,
                        sigma= 3,
-                       R=NULL,
+                       R= NULL,
                        peak.threshold= 0.05,
                        index.only= FALSE,
                        peak.window= 2,
                        both = FALSE,
                        verbose= FALSE) {
+    #' Find peaks in a dataset
+    #' @details
     #' find fast and dirty peak candidates, and their positions
-    #' it checks if peaks are closer than peak.window and cuts off
-    #' the second position in that case
+    #' The idea is to take the first derivative using a Gaussian difference
+    #' kernel, and then find the zero transitions from positive to negative
+    #' slopes.
+    #' We check if peaks are closer than peak.window, and take the maximum
+    #' within this range (cutting secondary peaks off).
+    #' The function can return the index of a peak, its weighted position and
+    #' the hight of the local maximum.
     #'
     #' @param a     two column array, [x,y]
     #' @param sigma width for the differential kernel
@@ -208,7 +221,7 @@ find.peaks <- function(a,
 
     x <- a[,1]
     y <- a[,2]
-    dy <- differentiate.Gauss(y, sigma, R)
+    dy <- diff.gauss(y, sigma, R)
     # this is where the derivative crosses from + to -:
     indx.1 <- y[-1] > peak.threshold*max(y)
     indx.2 <- diff(sign(dy)) < -1
@@ -267,10 +280,11 @@ find.peaks <- function(a,
 }
 
 
-background.Gauss <- function(y, sigma= 10, N= 10) {
+background.gauss <- function(y, sigma= 10, N= 10) {
     #' Calculate a background based on smoothing the data
     #" using a Gaussian filter
     #'
+    #' @details
     #' Run the filter with sigma standard deviation N times,
     #' and in every keep the lower value between the filtered
     #' curve and the one before this filter step.
@@ -285,11 +299,11 @@ background.Gauss <- function(y, sigma= 10, N= 10) {
     #'
     #' @export
 
-    y.bg <- smooth.Gauss(y, 4)
+    y.bg <- smooth.gauss(y, 4)
     N.y <- length(y)
     # keep.indx <- rep(TRUE, length(x))
     for (i in 1:N) {
-        bg <- smooth.Gauss(y.bg, sigma)
+        bg <- smooth.gauss(y.bg, sigma)
         # indx <- (y.bg > bg)
         #y.bg[indx] <- bg[indx]
         y.bg <- apply(array(c(y.bg, bg), dim=c(N.y,2)),

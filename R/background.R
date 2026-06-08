@@ -1,6 +1,5 @@
-#Remove a linear background from a dataset:
-
 lin.background <- function(x, y= NULL, q= 0.5, verbose= FALSE){
+    #' @details
     #' background correction to remove linear backgrounds
     #' Data sets often have a linear drift. To estimate this drift, the
     #' lower part of the y data are taken into account and fitted using lm()
@@ -50,8 +49,15 @@ lin.background <- function(x, y= NULL, q= 0.5, verbose= FALSE){
 
 
 background <- function(y, width= 20) {
-    #' find a lower envelope for the function using a window of
-    #' 2*width + 1, thus for every points +/- width
+    #' @details
+    #' Calculate a background of a data set assuming this background
+    #' is a lower envelop of the curve represented in the 'y' array.
+    #' The process works by taking the minimum between the actual data
+    #' point and the average of two points at the distance of +/- j,
+    #' thus employing a window of 2j +1.
+    #' This procedure is repeated for j = 1 ... width.
+    #'
+    #' @references
     #' Based on the work of:
     #' Miroslav Morhác and Vladislav Matousek,
     #' Peak clipping algorithms for background estimation in

@@ -1,6 +1,7 @@
 # basic function to load files, do calculations on the data
 
-applyto.all <- function(pattern, f.call, prefix='res', ...) {
+process.ls <- function(pattern, f.call, prefix='res', ...) {
+    #' @details
     #' take all variables based on pattern,
     #' and apply the function on them, then
     #' save the results back prepending prefix and '.' to their names
@@ -52,6 +53,7 @@ read.all.files <- function(folder='./', pattern='.*\\.csv$',
                            recursive= FALSE,
                            ...
                            ) {
+    #' @details
     #' find a list of files based on folder and pattern via dir(),
     #' apply reader(path, ...) to read them
     #' convert their names to variable names using prefix and remove patterns
