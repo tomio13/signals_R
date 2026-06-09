@@ -2,10 +2,7 @@
 % Please edit documentation in R/Gauss-filters.R
 \name{convolve.fft}
 \alias{convolve.fft}
-\title{convolution using FFT
-When convolution filter is used for smoothing data, data and the
-kernel are zero padded traditionally. However, this causes a cut-off
-at the edges, which is often an undesired effect.}
+\title{convolution using FFT with nonzero padding}
 \usage{
 convolve.fft(x, y, padding = "", is.filter = TRUE)
 }
@@ -23,13 +20,19 @@ y is then the filter kernel}
 the convolved array with length of x
 }
 \description{
+convolution using FFT with nonzero padding
+}
+\details{
+When convolution filter is used for smoothing data, data and the
+kernel are zero padded traditionally. However, this causes a cut-off
+at the edges, which is often an undesired effect.
+
 This version pads the first function with its first and last value
 elminating cut off to 0 if these are non zero.
 This way a smoothing will work better, but such a treatment should not
 be done for other convolution operations, like autocorrelation.
 Thus, the switch is.filter activates this feature.
-}
-\details{
+
 One more word on padding: the signal is padded in a symmetric manner,
 the kernel only to its end. Then the resulted range is cut out of the
 returned convolved data.

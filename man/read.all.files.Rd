@@ -2,12 +2,7 @@
 % Please edit documentation in R/signalProcessing.R
 \name{read.all.files}
 \alias{read.all.files}
-\title{find a list of files based on folder and pattern via dir(),
-apply reader(path, ...) to read them
-convert their names to variable names using prefix and remove patterns
-add them to the global environment
-in all file names convert - or _ characters to .-s, and turn multiple '.'
-to single ones.}
+\title{apply a reader function to a list of filenames found by dir()}
 \usage{
 read.all.files(
   folder = "./",
@@ -44,6 +39,9 @@ read.all.files(
 nothing
 }
 \description{
+apply a reader function to a list of filenames found by dir()
+}
+\details{
 find a list of files based on folder and pattern via dir(),
 apply reader(path, ...) to read them
 convert their names to variable names using prefix and remove patterns

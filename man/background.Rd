@@ -2,13 +2,7 @@
 % Please edit documentation in R/background.R
 \name{background}
 \alias{background}
-\title{find a lower envelope for the function using a window of
-2*width + 1, thus for every points +/- width
-Based on the work of:
-Miroslav Morhác and Vladislav Matousek,
-Peak clipping algorithms for background estimation in
-spectroscopic data
-Applied Spectroscopy 62(1): 91 - 106 (2008)}
+\title{Calculate a background of a data set}
 \usage{
 background(y, width = 20)
 }
@@ -21,8 +15,17 @@ background(y, width = 20)
 array of new points
 }
 \description{
-find a lower envelope for the function using a window of
-2*width + 1, thus for every points +/- width
+Calculate a background of a data set
+}
+\details{
+Calculate a background of a data set assuming this background
+is a lower envelop of the curve represented in the 'y' array.
+The process works by taking the minimum between the actual data
+point and the average of two points at the distance of +/- j,
+thus employing a window of 2j +1.
+This procedure is repeated for j = 1 ... width.
+}
+\references{
 Based on the work of:
 Miroslav Morhác and Vladislav Matousek,
 Peak clipping algorithms for background estimation in

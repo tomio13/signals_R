@@ -2,10 +2,7 @@
 % Please edit documentation in R/background.R
 \name{lin.background}
 \alias{lin.background}
-\title{background correction to remove linear backgrounds
-Data sets often have a linear drift. To estimate this drift, the
-lower part of the y data are taken into account and fitted using lm()
-This background can be then subtracted.}
+\title{estimate a linear background of a data set}
 \usage{
 lin.background(x, y = NULL, q = 0.5, verbose = FALSE)
 }
@@ -23,6 +20,9 @@ by default it is 0.5 -> median}
 returns a list with the new values, x,y and the fit object ft
 }
 \description{
+estimate a linear background of a data set
+}
+\details{
 background correction to remove linear backgrounds
 Data sets often have a linear drift. To estimate this drift, the
 lower part of the y data are taken into account and fitted using lm()

@@ -10,5 +10,5 @@ Description: Signal processing has several tasks. This small library focuses on 
 Encoding: UTF-8
 License: CC BY 4.0
 URL:
-BugReports:
+BugReports: https://github.com/tomio13/signals_R/issues
 Config/roxygen2/version: 8.0.0

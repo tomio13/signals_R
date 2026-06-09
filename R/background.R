@@ -1,4 +1,5 @@
 lin.background <- function(x, y= NULL, q= 0.5, verbose= FALSE){
+    #' estimate a linear background of a data set
     #' @details
     #' background correction to remove linear backgrounds
     #' Data sets often have a linear drift. To estimate this drift, the
@@ -49,6 +50,7 @@ lin.background <- function(x, y= NULL, q= 0.5, verbose= FALSE){
 
 
 background <- function(y, width= 20) {
+    #' Calculate a background of a data set
     #' @details
     #' Calculate a background of a data set assuming this background
     #' is a lower envelop of the curve represented in the 'y' array.

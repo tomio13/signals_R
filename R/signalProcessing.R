@@ -1,6 +1,8 @@
 # basic function to load files, do calculations on the data
 
-process.ls <- function(pattern, f.call, prefix='res', ...) {
+process.ls <- function(pattern, f.call, prefix='res', return.list= TRUE, ...) {
+    #' process data based on a name pattern and export the results
+    #' into the global environment
     #' @details
     #' take all variables based on pattern,
     #' and apply the function on them, then
@@ -11,6 +13,8 @@ process.ls <- function(pattern, f.call, prefix='res', ...) {
     #'                  variable to be applied on. All extra parameters
     #'                  are passed to this function
     #' @param prefix    text, prepend this to the result names
+    #' @param return.list Boolean, if TRUE return an invisible list of results indexed
+    #'                    using the name of found variables.
     #' @param ...       all further parameters are passed to the specified function
     #'
     #' @return nothing
@@ -22,6 +26,8 @@ process.ls <- function(pattern, f.call, prefix='res', ...) {
         cat('variables with pattern:', pattern, 'not found\n')
         return()
     }
+    res <- list()
+
     for (i in seq_along(lst)){
         cat('running on', lst[i], '\n')
         a <- get(lst[i], envir= .GlobalEnv)
@@ -36,9 +42,16 @@ process.ls <- function(pattern, f.call, prefix='res', ...) {
             } else {
                 cat('result was not saved without prefix\n')
             }
+
+            if (return.list) {
+                res[[i]] <- b
+            }
         } else {
             cat('variable', lst[i], 'is empty\n');
         }
+    }
+    if (return.list) {
+        invisible(res)
     }
     return()
 }
@@ -53,6 +66,7 @@ read.all.files <- function(folder='./', pattern='.*\\.csv$',
                            recursive= FALSE,
                            ...
                            ) {
+    #' apply a reader function to a list of filenames found by dir()
     #' @details
     #' find a list of files based on folder and pattern via dir(),
     #' apply reader(path, ...) to read them

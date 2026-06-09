@@ -2,9 +2,7 @@
 % Please edit documentation in R/Gauss-filters.R
 \name{find.peaks}
 \alias{find.peaks}
-\title{find fast and dirty peak candidates, and their positions
-it checks if peaks are closer than peak.window and cuts off
-the second position in that case}
+\title{Find peaks in a dataset}
 \usage{
 find.peaks(
   a,
@@ -43,7 +41,15 @@ an array of peak posiions in X or a list with index, position
          an array of index positions
 }
 \description{
+Find peaks in a dataset
+}
+\details{
 find fast and dirty peak candidates, and their positions
-it checks if peaks are closer than peak.window and cuts off
-the second position in that case
+The idea is to take the first derivative using a Gaussian difference
+kernel, and then find the zero transitions from positive to negative
+slopes.
+We check if peaks are closer than peak.window, and take the maximum
+within this range (cutting secondary peaks off).
+The function can return the index of a peak, its weighted position and
+the hight of the local maximum.
 }
