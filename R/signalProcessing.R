@@ -53,7 +53,7 @@ process.ls <- function(pattern, f.call, prefix='res', return.list= TRUE, ...) {
     if (return.list) {
         invisible(res)
     }
-    return()
+    return(res)
 }
 
 
