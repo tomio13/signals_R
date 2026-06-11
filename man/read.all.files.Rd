@@ -13,6 +13,7 @@ read.all.files(
   remove.extension = TRUE,
   remove.dir = TRUE,
   recursive = FALSE,
+  envir = .GlobalEnv,
   ...
 )
 }
@@ -33,6 +34,8 @@ read.all.files(
 
 \item{recursive}{Boolean, run into subfolders or not}
 
+\item{envir}{environment, where to put the results}
+
 \item{...}{all further parameters are passed to the reader function}
 }
 \value{
@@ -45,7 +48,7 @@ apply a reader function to a list of filenames found by dir()
 find a list of files based on folder and pattern via dir(),
 apply reader(path, ...) to read them
 convert their names to variable names using prefix and remove patterns
-add them to the global environment
+add them to the named environment.
 in all file names convert - or _ characters to .-s, and turn multiple '.'
 to single ones.
 }

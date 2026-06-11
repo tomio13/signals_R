@@ -44,8 +44,8 @@ an array of peak posiions in X or a list with index, position
 Find peaks in a dataset
 }
 \details{
-find fast and dirty peak candidates, and their positions
-The idea is to take the first derivative using a Gaussian difference
+find fast and dirty peak candidates, and their positions.
+The idea is to take the first derivative using a Gaussian differential
 kernel, and then find the zero transitions from positive to negative
 slopes.
 We check if peaks are closer than peak.window, and take the maximum

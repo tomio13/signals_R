@@ -9,12 +9,12 @@ smooth.gauss(y, sigma = 10, R = NULL, deriv = 0)
 \arguments{
 \item{y}{the data}
 
-\item{sigma}{width of the Gaussian, standard deviation}
+\item{sigma}{integer, width of the Gaussian, standard deviation}
 
-\item{R}{the half window size for the kernel; if NULL,
+\item{R}{integer, the half window size for the kernel; if NULL,
 use automatic, 3*sigma see gauss.kernel}
 
-\item{deriv}{derivative, possible values 0 or 1}
+\item{deriv}{integer, derivative, possible values 0 or 1}
 }
 \value{
 array of smoothed data
@@ -23,7 +23,7 @@ array of smoothed data
 A function to smooth the data array y using a Gaussian kernel
 }
 \details{
-It uses an offsetted padding and the convolve.fft function
+This function uses an non-zero padding and the convolve.fft function
 to calculate the result.
 The mean is subtracted from y for removing an offset.
 If y is only smoothed, this mean is readded at the end. For the
@@ -32,4 +32,8 @@ derivative it is left out.
 If R (window radius) is not more than 3*sigma, the kernel is renormalized to avoid
 offsetting the data.
 The full window is 2R+1 wide.
+The derivative (deriv= 1) is calculated with the negative of the
+derivative of the Gaussian kernel, because we need the kernel be positive first
+then negative. This is equivalent to a smoothing then using the diff(), but returns
+an array with the same length as y.
 }

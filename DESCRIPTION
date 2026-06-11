@@ -1,6 +1,6 @@
 Package: tomio.signals
 Version: 1.0
-Date: 2020-06-01 - 2026
+Date: 2020-06-01
 Title: Easy signal processing tools for R
 Author: Tamás Haraszti [aut, cre]
 Maintainer: Tamás Haraszti <haraszti@dwi.rwth-aachen.de>
@@ -9,6 +9,6 @@ Suggests:
 Description: Signal processing has several tasks. This small library focuses on using a Gaussian kernel to smooth data or differeitiate with smoothing. A non-zero padding FFT based convolution filter is provided for this purpose. Another function uses the first derivative for an easy peak detector.
 Encoding: UTF-8
 License: CC BY 4.0
-URL:
+URL: https://github.com/tomio13/signals_R/
 BugReports: https://github.com/tomio13/signals_R/issues
 Config/roxygen2/version: 8.0.0

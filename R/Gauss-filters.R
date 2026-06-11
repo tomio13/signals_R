@@ -108,7 +108,7 @@ gauss.kernel <- function(sigma, R= NULL, deriv=0) {
 smooth.gauss <- function(y, sigma= 10, R= NULL, deriv=0) {
     #' A function to smooth the data array y using a Gaussian kernel
     #' @details
-    #' It uses an offsetted padding and the convolve.fft function
+    #' This function uses an non-zero padding and the convolve.fft function
     #' to calculate the result.
     #' The mean is subtracted from y for removing an offset.
     #' If y is only smoothed, this mean is readded at the end. For the
@@ -117,12 +117,16 @@ smooth.gauss <- function(y, sigma= 10, R= NULL, deriv=0) {
     #' If R (window radius) is not more than 3*sigma, the kernel is renormalized to avoid
     #' offsetting the data.
     #' The full window is 2R+1 wide.
+    #' The derivative (deriv= 1) is calculated with the negative of the
+    #' derivative of the Gaussian kernel, because we need the kernel be positive first
+    #' then negative. This is equivalent to a smoothing then using the diff(), but returns
+    #' an array with the same length as y.
     #'
     #' @param y     the data
-    #' @param sigma width of the Gaussian, standard deviation
-    #' @param R     the half window size for the kernel; if NULL,
+    #' @param sigma integer, width of the Gaussian, standard deviation
+    #' @param R     integer, the half window size for the kernel; if NULL,
     #'              use automatic, 3*sigma see gauss.kernel
-    #' @param deriv derivative, possible values 0 or 1
+    #' @param deriv integer, derivative, possible values 0 or 1
     #'
     #' @return array of smoothed data
     #'
@@ -192,8 +196,8 @@ find.peaks <- function(a,
                        verbose= FALSE) {
     #' Find peaks in a dataset
     #' @details
-    #' find fast and dirty peak candidates, and their positions
-    #' The idea is to take the first derivative using a Gaussian difference
+    #' find fast and dirty peak candidates, and their positions.
+    #' The idea is to take the first derivative using a Gaussian differential
     #' kernel, and then find the zero transitions from positive to negative
     #' slopes.
     #' We check if peaks are closer than peak.window, and take the maximum
@@ -282,13 +286,13 @@ find.peaks <- function(a,
 
 background.gauss <- function(y, sigma= 10, N= 10) {
     #' Calculate a background based on smoothing the data
-    #" using a Gaussian filter
+    #" using a Gaussian filter.
     #'
     #' @details
     #' Run the filter with sigma standard deviation N times,
     #' and in every keep the lower value between the filtered
     #' curve and the one before this filter step.
-    #' The resuls is the smoothed curve.
+    #' The resuls is the smoothed background curve.
     #'
     #' @param y   the original curve
     #' @param sigma the standard deviation / width of the Gaussian
@@ -297,9 +301,18 @@ background.gauss <- function(y, sigma= 10, N= 10) {
     #'
     #' @return an array of the background data
     #'
+    #' @examples
+    #' # Create an array with some peaks and noise
+    #' x <- seq(0, 4*pi, len=200)
+    #' set.seed(1234)
+    #' y <- 2*sin(x) + 2*cos(3*x) - 0.5*(x-2*pi)**2
+    #' plot(x,y)
+    #' lines(x, background.gauss(y, 3,10), col='blue')
+    #' # you may want to remove the jumps to lower noisy points
+    #' lines(x, smooth.gauss(background.gauss(y, 3,10), 2), col='red')
     #' @export
 
-    y.bg <- smooth.gauss(y, 4)
+    y.bg <- y
     N.y <- length(y)
     # keep.indx <- rep(TRUE, length(x))
     for (i in 1:N) {

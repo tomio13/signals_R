@@ -24,5 +24,15 @@ Calculate a background based on smoothing the data
 Run the filter with sigma standard deviation N times,
 and in every keep the lower value between the filtered
 curve and the one before this filter step.
-The resuls is the smoothed curve.
+The resuls is the smoothed background curve.
+}
+\examples{
+# Create an array with some peaks and noise
+x <- seq(0, 4*pi, len=200)
+set.seed(1234)
+y <- 2*sin(x) + 2*cos(3*x) - 0.5*(x-2*pi)**2
+plot(x,y)
+lines(x, background.gauss(y, 3,10), col='blue')
+# you may want to remove the jumps to lower noisy points
+lines(x, smooth.gauss(background.gauss(y, 3,10), 2), col='red')
 }

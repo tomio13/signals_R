@@ -5,7 +5,14 @@
 \title{process data based on a name pattern and export the results
 into the global environment}
 \usage{
-process.ls(pattern, f.call, prefix = "res", return.list = TRUE, ...)
+process.ls(
+  pattern,
+  f.call,
+  prefix = "res",
+  return.list = TRUE,
+  envir = .GlobalEnv,
+  ...
+)
 }
 \arguments{
 \item{pattern}{text, the variables to work on}
@@ -18,6 +25,9 @@ are passed to this function}
 
 \item{return.list}{Boolean, if TRUE return an invisible list of results indexed
 using the name of found variables.}
+
+\item{envir}{environment, the environment to work with. Both the input and
+output are in this environment.}
 
 \item{...}{all further parameters are passed to the specified function}
 }
@@ -32,4 +42,14 @@ into the global environment
 take all variables based on pattern,
 and apply the function on them, then
 save the results back prepending prefix and '.' to their names
+and/or create a list of the results and return it.
+
+While it is a bad practice to emit results into the global environment,
+this is a shorthand for looping for the foul.
+Practically one can just do the looping as:
+ sapply(ls(pattern= pattern), function(n)\{ a <- get(n); ....\})
+
+to get simple results, but if your called function creates something
+more complicated, e.g. a list, you may want to put it back to the memory
+and not spend manual work on it. This is where this function comes handy.
 }
