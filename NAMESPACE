@@ -2,7 +2,7 @@ importFrom("graphics", "abline", "lines", "points")
 importFrom("stats", "coef", "fft", "lm", "predict", "quantile")
 importFrom("utils", "head", "read.table", "tail")
 
-S3method(diff,gauss)
+export(diff.gauss)
 export(background)
 export(background.gauss)
 export(convolve.fft)

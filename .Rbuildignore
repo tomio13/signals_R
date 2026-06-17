@@ -1,0 +1,5 @@
+^\\.git
+^\\..*
+\\.R-[0-9]*$
+^Docs
+^Gauss-filters.*$
